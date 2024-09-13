@@ -10,7 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_11_035909) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_13_013910) do
+  create_table "estate_listings", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "estate_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["estate_id"], name: "index_estate_listings_on_estate_id"
+    t.index ["user_id"], name: "index_estate_listings_on_user_id"
+  end
+
+  create_table "estates", force: :cascade do |t|
+    t.string "header"
+    t.string "link"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -19,12 +35,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_11_035909) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "header"
-    t.string "link"
+    t.string "name"
     t.string "jti", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["jti"], name: "index_users_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "estate_listings", "estates"
+  add_foreign_key "estate_listings", "users"
 end
