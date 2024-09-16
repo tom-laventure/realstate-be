@@ -1,4 +1,5 @@
 class Estate < ApplicationRecord
-    has_many :estate_listings, dependent :destroy
-    has_many :users, through :estate_listings
+    belongs_to :group
+    :has_many estate_ratings, dependent: destroy
+    :has_many estate_comments, dependent: destroy
 end

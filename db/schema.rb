@@ -10,14 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_16_040506) do
-  create_table "estate_listings", force: :cascade do |t|
+ActiveRecord::Schema[7.1].define(version: 2024_09_16_044833) do
+  create_table "estate_comments", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "estate_id", null: false
+    t.string "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["estate_id"], name: "index_estate_listings_on_estate_id"
-    t.index ["user_id"], name: "index_estate_listings_on_user_id"
+    t.index ["estate_id"], name: "index_estate_comments_on_estate_id"
+    t.index ["user_id"], name: "index_estate_comments_on_user_id"
   end
 
   create_table "estate_ratings", force: :cascade do |t|
@@ -47,6 +48,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_16_040506) do
     t.index ["user_id"], name: "index_groups_on_user_id"
   end
 
+  create_table "user_groups", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_user_groups_on_group_id"
+    t.index ["user_id"], name: "index_user_groups_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -62,10 +72,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_16_040506) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "estate_listings", "estates"
-  add_foreign_key "estate_listings", "users"
+  add_foreign_key "estate_comments", "estates"
+  add_foreign_key "estate_comments", "users"
   add_foreign_key "estate_ratings", "estates"
   add_foreign_key "estate_ratings", "users"
   add_foreign_key "estates", "groups"
   add_foreign_key "groups", "users"
+  add_foreign_key "user_groups", "groups"
+  add_foreign_key "user_groups", "users"
 end

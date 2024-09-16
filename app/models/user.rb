@@ -1,8 +1,10 @@
 class User < ApplicationRecord
   include Devise::JWT::RevocationStrategies::JTIMatcher
-  has_many :estate_listings, dependent: :destroy
-  has_many :estates, through: :estate_listings
-  
+  has_many :user_groups, dependent: :destroy
+  has_many :groups, through: :user_groups
+
+  has_many :estate_comments, dependent: :destroy
+  has_many :estate_ratings, dependent: :destroy
   
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
