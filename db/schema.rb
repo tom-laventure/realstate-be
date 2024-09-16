@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_13_013910) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_16_040506) do
   create_table "estate_listings", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "estate_id", null: false
@@ -20,11 +20,31 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_13_013910) do
     t.index ["user_id"], name: "index_estate_listings_on_user_id"
   end
 
+  create_table "estate_ratings", force: :cascade do |t|
+    t.decimal "rating", precision: 3, scale: 1
+    t.integer "user_id", null: false
+    t.integer "estate_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["estate_id"], name: "index_estate_ratings_on_estate_id"
+    t.index ["user_id"], name: "index_estate_ratings_on_user_id"
+  end
+
   create_table "estates", force: :cascade do |t|
     t.string "header"
     t.string "link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "group_id"
+    t.index ["group_id"], name: "index_estates_on_group_id"
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.string "name"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_groups_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -44,4 +64,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_13_013910) do
 
   add_foreign_key "estate_listings", "estates"
   add_foreign_key "estate_listings", "users"
+  add_foreign_key "estate_ratings", "estates"
+  add_foreign_key "estate_ratings", "users"
+  add_foreign_key "estates", "groups"
+  add_foreign_key "groups", "users"
 end
