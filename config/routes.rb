@@ -10,10 +10,6 @@ Rails.application.routes.draw do
   }
 
   namespace :v1 do
-    resource :users, only: [] do
-      member do
-        get 'groups'
-      end
-    end
+    get 'groups', to: 'users#groups'
   end
 end

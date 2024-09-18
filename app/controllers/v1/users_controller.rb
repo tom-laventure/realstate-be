@@ -1,14 +1,10 @@
 class V1::UsersController < ApplicationController
-    before_action :set_user, only: [:groups]
-
+    include UserValidation
+    before_action :auth_user
+  
     def groups
-        groups = user.groups
-        render json: groups, status: :ok
+      groups = @current_user.groups
+      render json: groups, status: :ok
     end
-
-    private
-    def set_user
-        @user = User.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-        render 
-end
+  end
+  
