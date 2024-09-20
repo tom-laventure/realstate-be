@@ -23,7 +23,7 @@ class Users::SessionsController < Devise::SessionsController
       current_user = User.find(jwt_payload['sub'])
     end
     
-    if current_user
+    if current_user.jti == jwt_payload['jti']
       revoke_token(current_user)
       render json: {
         status: 200,
