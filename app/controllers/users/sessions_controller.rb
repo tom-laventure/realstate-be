@@ -24,6 +24,7 @@ class Users::SessionsController < Devise::SessionsController
     end
     
     if current_user
+      revoke_token(current_user)
       render json: {
         status: 200,
         message: 'Logged out successfully.'
@@ -35,4 +36,14 @@ class Users::SessionsController < Devise::SessionsController
       }, status: :unauthorized
     end
   end
+
+  def revoke_token(user)
+    user.update_column(:jti, generate_jti)
+  end
+
+  def generate_jti
+    SecureRandom.uuid
+  end
+
+  
 end

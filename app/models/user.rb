@@ -12,4 +12,18 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: self
 
+
+  # user.rb
+  def jwt_payload
+    self.jti = self.class.generate_jti
+    self.save
+
+    # super isn't doing anything useful, but if the gem updates i'll want it to be safe
+    super.merge({
+      jti: self.jti,
+      usr: self.id,
+      name: self.name
+    })
+  end
+
 end
