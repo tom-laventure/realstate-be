@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   defaults: { format: :json }
 
   namespace :v1 do
-    get 'groups', to: 'users#groups'
+    post 'groups/create', to: 'groups#create'
+    get 'groups', to: 'groups#retrieve'
   end
 end
