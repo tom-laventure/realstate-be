@@ -43,12 +43,6 @@ class V1::CommentsController < ApplicationController
         render json: { status: 422, message: 'Error deleting comment' }, status: :unprocessable_entity
       end
     end
-
-    def createSubcomment
-        subcomment = @comment.subcomment
-
-
-    end
   
     private
   

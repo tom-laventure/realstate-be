@@ -1,0 +1,63 @@
+class V1::SubcommentsController < ApplicationController
+    include UserValidation
+
+    before_action :auth_user
+    before_action :set_estate_comment, only: [:create, :index]
+    before_action :set_subcomment, only: [:show, :update, :destroy]
+  
+    # GET /v1/subcomments
+    def index
+      subcomments = @estate_comment.subcomments
+      render json: { status: 200, subcomments: subcomments }
+    end
+  
+    # GET /v1/subcomments/:id
+    def show
+      render json: { status: 200, subcomment: @subcomment }
+    end
+  
+    # POST /v1/subcomments
+    def create
+      subcomment = @estate_comment.subcomments.new(subcomment_params.merge(user: current_user))
+  
+      if subcomment.save
+        render json: { status: 201, message: 'Subcomment created successfully', subcomment: subcomment }, status: :created
+      else
+        render json: { status: 422, message: 'Failed to create subcomment', errors: subcomment.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+  
+    # PUT /v1/subcomments/:id
+    def update
+      if @subcomment.update(subcomment_params)
+        render json: { status: 200, message: 'Subcomment updated successfully', subcomment: @subcomment }
+      else
+        render json: { status: 422, message: 'Failed to update subcomment', errors: @subcomment.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+  
+    # DELETE /v1/subcomments/:id
+    def destroy
+      @subcomment.destroy
+      render json: { status: 200, message: 'Subcomment deleted successfully' }
+    end
+  
+    private
+  
+    def set_estate_comment
+      @estate_comment = EstateComment.find(params['estate_comment_id'])
+    rescue ActiveRecord::RecordNotFound
+      render json: { status: 404, message: 'Estate comment not found' }, status: :not_found
+    end
+  
+    def set_subcomment
+      @subcomment = Subcomment.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      render json: { status: 404, message: 'Subcomment not found' }, status: :not_found
+    end
+  
+    def subcomment_params
+      params.require(:subcomment).permit(:content)
+    end
+  end
+  
