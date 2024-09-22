@@ -11,7 +11,13 @@ Rails.application.routes.draw do
   defaults: { format: :json }
 
   namespace :v1 do
-    post 'groups/create', to: 'groups#create'
     get 'groups', to: 'groups#retrieve'
+    post 'groups/create', to: 'groups#create'
+
+    resources :groups, only: [:update, :destroy]
+
+    resources :estates, only: [:update, :create, :index, :show, :destroy]
+
+    resources :ratings, only: [:index, :show, :create, :update, :destroy]
   end
 end
