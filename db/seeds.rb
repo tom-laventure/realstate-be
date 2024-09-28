@@ -77,12 +77,14 @@ EstateRating.create!(
 EstateComment.create!(
   user: user1,
   estate: estate1,
+  comment_type: 'good',
   comment: 'This estate is absolutely stunning!'
 )
 
 EstateComment.create!(
   user: user2,
   estate: estate2,
+  comment_type: 'good',
   comment: 'This cottage is perfect for a quiet weekend getaway.'
 )
 

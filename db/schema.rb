@@ -15,6 +15,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_22_072519) do
     t.integer "user_id", null: false
     t.integer "estate_id", null: false
     t.string "comment"
+    t.string "comment_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["estate_id"], name: "index_estate_comments_on_estate_id"

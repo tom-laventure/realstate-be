@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Users::SessionsController < Devise::SessionsController
-  include UserValidation, RackSessionsFix
+  # include UserValidation, RackSessionsFix
   respond_to :json
 
   private
@@ -24,7 +24,7 @@ class Users::SessionsController < Devise::SessionsController
     end
     
     if current_user.jti == jwt_payload['jti']
-      revoke_token(current_user)
+      # revoke_token(current_user)
       render json: {
         status: 200,
         message: 'Logged out successfully.'

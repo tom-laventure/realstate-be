@@ -4,5 +4,5 @@ class EstateComment < ApplicationRecord
   has_many :subcomments, dependent: :destroy
 
   validates :comment, presence: true, length: { minimum: 2 } 
-  validates :type, presence: true 
+  validates :comment_type, presence: true 
 end

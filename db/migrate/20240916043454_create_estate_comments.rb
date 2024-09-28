@@ -4,6 +4,7 @@ class CreateEstateComments < ActiveRecord::Migration[7.1]
       t.references :user, null: false, foreign_key: true
       t.references :estate, null: false, foreign_key: true
       t.string :comment
+      t.string :comment_type
 
       t.timestamps
     end
