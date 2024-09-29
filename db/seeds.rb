@@ -51,6 +51,11 @@ UserGroup.create!(
 )
 
 UserGroup.create!(
+  user: user3,
+  group: group1
+)
+
+UserGroup.create!(
   user: user2,
   group: group2
 )

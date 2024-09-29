@@ -4,8 +4,8 @@ class V1::GroupsController < ApplicationController
 
     def retrieve
         groups = @current_user.groups
-        render json: groups, status: :ok
-    end
+        render json: GroupSerializer.new(groups)
+      end
 
     def create
         group_params = params.require(:name)
