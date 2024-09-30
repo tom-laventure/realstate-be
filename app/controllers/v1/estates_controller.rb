@@ -8,7 +8,7 @@ class V1::EstatesController < ApplicationController
     # GET /estates
     def index
       estates = @group.estates
-      render json: EstateSerializer.new(estates).serializable_hash, status: :ok
+      render json: estates, status: :ok
     end
   
     # GET /estates/:id
