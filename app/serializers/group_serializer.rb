@@ -1,6 +1,4 @@
-class GroupSerializer
-  include JSONAPI::Serializer
-
+class GroupSerializer  < ActiveModel::Serializer
   attributes :name
 
   has_many :users

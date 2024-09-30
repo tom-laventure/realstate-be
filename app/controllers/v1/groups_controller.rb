@@ -4,7 +4,7 @@ class V1::GroupsController < ApplicationController
 
     def retrieve
         groups = @current_user.groups
-        render json: GroupSerializer.new(groups).serializable_hash
+        render json: groups
       end
 
     def create
