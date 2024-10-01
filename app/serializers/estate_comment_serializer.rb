@@ -1,6 +1,7 @@
 class EstateCommentSerializer < ActiveModel::Serializer
-  attributes :comment
+  attributes :comment, :id, :comment_owner
 
-  belongs_to :user, serializer: UserSerializer
-  has_many :subcomments
+  def comment_owner
+   object.user.name
+  end
 end
