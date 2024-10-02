@@ -24,10 +24,12 @@ class Users::SessionsController < Devise::SessionsController
     end
     
     if current_user.jti == jwt_payload['jti']
-      # revoke_token(current_user)
       render json: {
         status: 200,
-        message: 'Logged out successfully.'
+        message: 'Logged out successfully.',
+        data: {
+          user: UserSerializer.new(current_user).serializable_hash
+        }
       }, status: :ok
     else
       render json: {
@@ -35,15 +37,5 @@ class Users::SessionsController < Devise::SessionsController
         message: "Couldn't find an active session."
       }, status: :unauthorized
     end
-  end
-
-  def revoke_token(user)
-    user.update_column(:jti, generate_jti)
-  end
-
-  def generate_jti
-    SecureRandom.uuid
-  end
-
-  
+  end  
 end
