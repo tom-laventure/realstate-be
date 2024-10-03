@@ -13,7 +13,7 @@ class V1::EstatesController < ApplicationController
   
     # GET /estates/:id
     def show
-      render json: { status: 200, data: @estate }, status: :ok
+      render json: @estate , status: :ok
     end
   
     # POST /estates
