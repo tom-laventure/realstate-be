@@ -22,7 +22,7 @@ class V1::EstateCommentsController < ApplicationController
       comment.user = @current_user
   
       if comment.save
-        render json: { status: 200, message: 'Comment successfully created', data: comment }, status: :created
+        render json: comment, status: :created
       else
         render json: { status: 422, message: 'Error creating comment', errors: comment.errors.full_messages }, status: :unprocessable_entity
       end
@@ -31,7 +31,7 @@ class V1::EstateCommentsController < ApplicationController
     # PUT /v1/estate_comments/:id
     def update
       if @comment.update(comment_params)
-        render json: { status: 200, message: 'Comment successfully updated', data: @comment }, status: :ok
+        render json: @comment, status: :ok
       else
         render json: { status: 422, message: 'Error updating comment', errors: @comment.errors.full_messages }, status: :unprocessable_entity
       end
@@ -49,7 +49,6 @@ class V1::EstateCommentsController < ApplicationController
     private
   
     def set_estate
-      Rails.logger.debug "params here ------------------- #{params['estate_id']}"
       @estate = Estate.find(params['estate_id'])
     rescue ActiveRecord::RecordNotFound
       render json: { status: 404, message: 'Estate not found' }, status: :not_found
