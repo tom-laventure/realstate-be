@@ -18,9 +18,9 @@ Rails.application.routes.draw do
 
     resources :estates, only: [:update, :create, :index, :show, :destroy]
 
-    resources :ratings, only: [:index, :show, :create, :update, :destroy]
+    resources :estate_ratings, only: [:index, :show, :create, :update, :destroy]
 
-    resources :comments, only: [:index, :show, :create, :update, :destroy]
+    resources :estate_comments, only: [:index, :show, :create, :update, :destroy]
 
     resources :subcomments, only: [:index, :show, :create, :update, :destroy]
   end
