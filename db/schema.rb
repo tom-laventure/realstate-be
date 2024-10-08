@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_02_055053) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_08_043303) do
   create_table "estate_comments", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "estate_id", null: false
@@ -48,12 +48,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_02_055053) do
   end
 
   create_table "subcomments", force: :cascade do |t|
-    t.integer "estate_comments_id", null: false
+    t.integer "estate_comment_id", null: false
     t.string "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
-    t.index ["estate_comments_id"], name: "index_subcomments_on_estate_comments_id"
+    t.index ["estate_comment_id"], name: "index_subcomments_on_estate_comment_id"
     t.index ["user_id"], name: "index_subcomments_on_user_id"
   end
 
@@ -87,7 +87,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_02_055053) do
   add_foreign_key "estate_ratings", "estates"
   add_foreign_key "estate_ratings", "users"
   add_foreign_key "estates", "groups"
-  add_foreign_key "subcomments", "estate_comments", column: "estate_comments_id"
+  add_foreign_key "subcomments", "estate_comments"
   add_foreign_key "subcomments", "users"
   add_foreign_key "user_groups", "groups"
   add_foreign_key "user_groups", "users"
