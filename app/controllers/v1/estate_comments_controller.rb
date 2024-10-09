@@ -40,7 +40,7 @@ class V1::EstateCommentsController < ApplicationController
     # DELETE /v1/estate_comments/:id
     def destroy
       if @comment.destroy
-        render json: { status: 200, message: 'Comment successfully deleted', comment_id: params[:id] }, status: :ok
+        render json: @estate.estate_comments, status: :ok
       else
         render json: { status: 422, message: 'Error deleting comment' }, status: :unprocessable_entity
       end
