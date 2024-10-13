@@ -21,7 +21,7 @@ class V1::SubcommentsController < ApplicationController
       subcomment = @estate_comment.subcomments.new(subcomment_params.merge(user: current_user))
   
       if subcomment.save
-        render json: { status: 201, message: 'Subcomment created successfully', subcomment: subcomment }, status: :created
+        render json: subcomment, status: :created
       else
         render json: { status: 422, message: 'Failed to create subcomment', errors: subcomment.errors.full_messages }, status: :unprocessable_entity
       end
@@ -30,7 +30,7 @@ class V1::SubcommentsController < ApplicationController
     # PUT /v1/subcomments/:id
     def update
       if @subcomment.update(subcomment_params)
-        render json: { status: 200, message: 'Subcomment updated successfully', subcomment: @subcomment }
+        render json: @subcomment
       else
         render json: { status: 422, message: 'Failed to update subcomment', errors: @subcomment.errors.full_messages }, status: :unprocessable_entity
       end
@@ -57,7 +57,7 @@ class V1::SubcommentsController < ApplicationController
     end
   
     def subcomment_params
-      params.require(:subcomment).permit(:content)
+      params.require(:subcomment).permit(:comment)
     end
   end
   
