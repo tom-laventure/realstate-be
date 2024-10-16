@@ -8,12 +8,12 @@ class V1::SubcommentsController < ApplicationController
     # GET /v1/subcomments
     def index
       subcomments = @estate_comment.subcomments
-      render json: { status: 200, subcomments: subcomments }
+      render json: subcomments
     end
   
     # GET /v1/subcomments/:id
     def show
-      render json: { status: 200, subcomment: @subcomment }
+      render json: @subcomment, serializer: SubcommentSerializer, current_user: current_user
     end
   
     # POST /v1/subcomments
@@ -21,7 +21,7 @@ class V1::SubcommentsController < ApplicationController
       subcomment = @estate_comment.subcomments.new(subcomment_params.merge(user: current_user))
   
       if subcomment.save
-        render json: subcomment, status: :created
+        render json: @estate_comment.subcomments, status: :created
       else
         render json: { status: 422, message: 'Failed to create subcomment', errors: subcomment.errors.full_messages }, status: :unprocessable_entity
       end

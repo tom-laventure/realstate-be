@@ -31,7 +31,7 @@ class V1::EstateCommentsController < ApplicationController
     # PUT /v1/estate_comments/:id
     def update
       if @comment.update(comment_params)
-        render json: @comment, status: :ok
+        render json: @estate.estate_comments, status: :ok
       else
         render json: { status: 422, message: 'Error updating comment', errors: @comment.errors.full_messages }, status: :unprocessable_entity
       end
