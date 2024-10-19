@@ -1,4 +1,6 @@
 class EstateComment < ApplicationRecord
+  acts_as_paranoid
+  
   belongs_to :user
   belongs_to :estate
   has_many :subcomments, dependent: :destroy

@@ -48,14 +48,14 @@ class V1::EstatesController < ApplicationController
     private
 
     def set_group
-      @group = @current_user.groups.find(params['group_id'])
+      @group = @current_user.groups.without_deleted.find(params['group_id'])
     rescue ActiveRecord::RecordNotFound
       render json: { status: 404, message: 'Group not found' }, status: :not_found
     end
   
 
     def set_estate
-      @estate = @group.estates.find(params[:id])
+      @estate = @group.estates.without_deleted.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       render json: { status: 404, message: 'Estate not found' }, status: :not_found
     end

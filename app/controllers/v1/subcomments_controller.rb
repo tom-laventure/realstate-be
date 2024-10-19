@@ -45,13 +45,13 @@ class V1::SubcommentsController < ApplicationController
     private
   
     def set_estate_comment
-      @estate_comment = EstateComment.find(params['estate_comment_id'])
+      @estate_comment = EstateComment.without_deleted.find(params['estate_comment_id'])
     rescue ActiveRecord::RecordNotFound
       render json: { status: 404, message: 'Estate comment not found' }, status: :not_found
     end
   
     def set_subcomment
-      @subcomment = Subcomment.find(params[:id])
+      @subcomment = Subcomment.without_deleted.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       render json: { status: 404, message: 'Subcomment not found' }, status: :not_found
     end

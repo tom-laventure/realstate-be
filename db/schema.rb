@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_08_043303) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_17_040623) do
   create_table "estate_comments", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "estate_id", null: false
@@ -18,6 +18,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_08_043303) do
     t.string "comment_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_estate_comments_on_deleted_at"
     t.index ["estate_id"], name: "index_estate_comments_on_estate_id"
     t.index ["user_id"], name: "index_estate_comments_on_user_id"
   end
@@ -38,6 +40,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_08_043303) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "group_id"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_estates_on_deleted_at"
     t.index ["group_id"], name: "index_estates_on_group_id"
   end
 
@@ -45,6 +49,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_08_043303) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_groups_on_deleted_at"
   end
 
   create_table "subcomments", force: :cascade do |t|
@@ -53,6 +59,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_08_043303) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_subcomments_on_deleted_at"
     t.index ["estate_comment_id"], name: "index_subcomments_on_estate_comment_id"
     t.index ["user_id"], name: "index_subcomments_on_user_id"
   end
@@ -62,6 +70,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_08_043303) do
     t.integer "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_user_groups_on_deleted_at"
     t.index ["group_id"], name: "index_user_groups_on_group_id"
     t.index ["user_id"], name: "index_user_groups_on_user_id"
   end

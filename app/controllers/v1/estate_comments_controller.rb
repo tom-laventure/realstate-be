@@ -49,13 +49,13 @@ class V1::EstateCommentsController < ApplicationController
     private
   
     def set_estate
-      @estate = Estate.find(params['estate_id'])
+      @estate = Estate.without_deleted.find(params['estate_id'])
     rescue ActiveRecord::RecordNotFound
       render json: { status: 404, message: 'Estate not found' }, status: :not_found
     end
   
     def set_comment
-      @comment = @estate.estate_comments.find(params[:id])
+      @comment = @estate.estate_comments.without_deleted.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       render json: { status: 404, message: 'Comment not found' }, status: :not_found
     end

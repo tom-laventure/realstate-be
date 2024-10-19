@@ -3,9 +3,9 @@ class V1::GroupsController < ApplicationController
     before_action :auth_user
 
     def retrieve
-        groups = @current_user.groups
+        groups = @current_user.groups.without_deleted 
         render json: groups
-      end
+    end
 
     def create
         group_params = params.require(:name)
