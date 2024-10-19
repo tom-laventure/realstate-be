@@ -30,6 +30,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_17_040623) do
     t.integer "estate_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_estate_ratings_on_deleted_at"
     t.index ["estate_id"], name: "index_estate_ratings_on_estate_id"
     t.index ["user_id"], name: "index_estate_ratings_on_user_id"
   end

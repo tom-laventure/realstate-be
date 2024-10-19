@@ -14,5 +14,8 @@ class AddDeletedAtToEstates < ActiveRecord::Migration[7.1]
 
     add_column :user_groups, :deleted_at, :datetime
     add_index :user_groups, :deleted_at
+
+    add_column :estate_ratings, :deleted_at, :datetime
+    add_index :estate_ratings, :deleted_at
   end
 end
