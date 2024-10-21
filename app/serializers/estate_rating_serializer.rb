@@ -1,7 +1,7 @@
 class EstateRatingSerializer < ActiveModel::Serializer
-  attributes :rating, :id, :comment_owner
+  attributes :rating, :id, :rating_owner
 
-  def comment_owner
+  def rating_owner
    object.user.name
   end
 
