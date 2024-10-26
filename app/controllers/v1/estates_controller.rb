@@ -7,7 +7,10 @@ class V1::EstatesController < ApplicationController
   
     # GET /estates
     def index
-      estates = @group.estates
+      estates = {
+        estates: ActiveModelSerializers::SerializableResource.new(@group.estates, each_serializer: EstateSerializer),
+        groups: ActiveModelSerializers::SerializableResource.new(@current_user.groups, each_serializer: GroupSerializer)
+      }
       render json: estates, status: :ok
     end
   
