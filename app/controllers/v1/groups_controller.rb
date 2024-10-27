@@ -14,12 +14,10 @@ class V1::GroupsController < ApplicationController
             name: params['name']
         }
 
-        created_group = @current_user.groups.create(group)
+        @current_user.groups.create(group)
 
         if @current_user.save()
-            render json: {status: 200, message: 'group successfully created', data: {
-                group: created_group
-            }}
+            render json: @current_user.groups
         else
             render json: {status: 404, message: 'error creating group'}
         end
