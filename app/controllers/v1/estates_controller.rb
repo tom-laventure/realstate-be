@@ -16,7 +16,12 @@ class V1::EstatesController < ApplicationController
   
     # GET /estates/:id
     def show
-      render json: @estate, status: :ok, serializer: EstateSerializer, current_user: current_user
+      estates = {
+        estates: ActiveModelSerializers::SerializableResource.new(@group.estates, each_serializer: EstateSerializer),
+        selected_estate: ActiveModelSerializers::SerializableResource.new(@estate, serializer: EstateSerializer, current_user: current_user)
+      } 
+
+      render json: estates, status: :ok   
     end
   
     # POST /estates
