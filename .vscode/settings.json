@@ -1,0 +1,5 @@
+{
+    "editor.defaultFormatter": "testdouble.vscode-standard-ruby",
+    "editor.formatOnSave": true,
+    "files.autoSave": "afterDelay"
+}

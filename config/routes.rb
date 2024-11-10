@@ -15,13 +15,10 @@ Rails.application.routes.draw do
     post 'groups/create', to: 'groups#create'
 
     resources :groups, only: [:update, :destroy]
-
     resources :estates, only: [:update, :create, :index, :show, :destroy]
-
     resources :estate_ratings, only: [:index, :show, :create, :update, :destroy]
-
     resources :estate_comments, only: [:index, :show, :create, :update, :destroy]
-
     resources :subcomments, only: [:index, :show, :create, :update, :destroy]
+    resources :messages, only: [:index, :create]
   end
 end

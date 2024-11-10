@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_17_040623) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_09_234203) do
   create_table "estate_comments", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "estate_id", null: false
@@ -53,6 +53,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_17_040623) do
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_groups_on_deleted_at"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.string "message"
+    t.datetime "deleted_at"
+    t.integer "user_id", null: false
+    t.integer "group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_messages_on_deleted_at"
+    t.index ["group_id"], name: "index_messages_on_group_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
   create_table "subcomments", force: :cascade do |t|
@@ -99,6 +111,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_17_040623) do
   add_foreign_key "estate_ratings", "estates"
   add_foreign_key "estate_ratings", "users"
   add_foreign_key "estates", "groups"
+  add_foreign_key "messages", "groups"
+  add_foreign_key "messages", "users"
   add_foreign_key "subcomments", "estate_comments"
   add_foreign_key "subcomments", "users"
   add_foreign_key "user_groups", "groups"
