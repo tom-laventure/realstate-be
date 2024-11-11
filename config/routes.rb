@@ -20,5 +20,6 @@ Rails.application.routes.draw do
     resources :estate_comments, only: [:index, :show, :create, :update, :destroy]
     resources :subcomments, only: [:index, :show, :create, :update, :destroy]
     resources :messages, only: [:index, :create]
+    resources :users, only: [:index]
   end
 end
