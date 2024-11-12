@@ -10,7 +10,7 @@ class V1::MessagesController < ApplicationController
       if message.save!
           # Broadcast the message to the chat channel
         ChatChannel.broadcast_to(@group, {
-          message: message
+          message: ActiveModelSerializers::SerializableResource.new(message, serializer: MessageSerializer).as_json
         })
         render json: { status: 200, message: 'Message successfully created', data: message }, status: :ok
       else
