@@ -1,5 +1,5 @@
 class V1::EstatesController < ApplicationController
-    include UserValidation
+    include UserValidation, Pagination
 
     before_action :auth_user
     before_action :set_group
@@ -16,9 +16,12 @@ class V1::EstatesController < ApplicationController
   
     # GET /estates/:id
     def show
+      paginated_comments = @estate.estate_comments.then(&paginate)
+      selected_estate = ActiveModelSerializers::SerializableResource.new(@estate, serializer: EstateSerializer, current_user: current_user, comments: paginated_comments)
+
       estates = {
         estates: ActiveModelSerializers::SerializableResource.new(@group.estates, each_serializer: EstateSerializer),
-        selected_estate: ActiveModelSerializers::SerializableResource.new(@estate, serializer: EstateSerializer, current_user: current_user)
+        selected_estate: selected_estate,
       } 
 
       render json: estates, status: :ok   

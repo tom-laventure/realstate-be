@@ -1,5 +1,5 @@
 class V1::EstateCommentsController < ApplicationController
-  include UserValidation
+  include UserValidation, Pagination
 
     before_action :auth_user
     before_action :set_estate
@@ -8,6 +8,7 @@ class V1::EstateCommentsController < ApplicationController
     # GET /v1/estate_comments
     def index
       comments = @estate.estate_comments
+
       render json: comments, status: :ok
     end
   
@@ -61,7 +62,7 @@ class V1::EstateCommentsController < ApplicationController
     end
   
     def comment_params
-      params.permit(:comment, :comment_type, :estate_id)
+      params.permit(:comment, :comment_type, :estate_id, :per_page, :offset)
     end
   end
   
