@@ -1,5 +1,5 @@
 class V1::MessagesController < ApplicationController
-  include UserValidation
+  include UserValidation, Pagination
   before_action :auth_user
   before_action :set_group
 
@@ -19,7 +19,7 @@ class V1::MessagesController < ApplicationController
     end
     
     def index
-      messages = @group.messages
+      messages = @group.messages.order(id: :desc).then(&paginate).reverse()
       render json: messages, status: :ok
     end
 
@@ -32,6 +32,6 @@ class V1::MessagesController < ApplicationController
 
     private
     def message_params
-      params.permit(:message, :group_id)
+      params.permit(:message, :group_id, :per_page, :page)
     end
 end

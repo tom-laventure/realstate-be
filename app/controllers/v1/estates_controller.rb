@@ -16,7 +16,7 @@ class V1::EstatesController < ApplicationController
   
     # GET /estates/:id
     def show
-      paginated_comments = @estate.estate_comments.then(&paginate)
+      paginated_comments = ActiveModelSerializers::SerializableResource.new(@estate.estate_comments.then(&paginate), each_serializer: EstateCommentSerializer, current_user: current_user)
       selected_estate = ActiveModelSerializers::SerializableResource.new(@estate, serializer: EstateSerializer, current_user: current_user, comments: paginated_comments)
 
       estates = {
