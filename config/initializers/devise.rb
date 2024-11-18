@@ -321,4 +321,13 @@ Devise.setup do |config|
     ]
     jwt.expiration_time = 1.week.to_i
   end
+
+  config.omniauth :google_oauth2,
+                  Rails.application.credentials[:google_app_id],
+                  Rails.application.credentials[:google_app_secret],
+                  { scope: 'userinfo.email, userinfo.profile', skip_jwt: true }
+  config.omniauth :facebook,
+                  Rails.application.credentials[:facebook_app_id],
+                  Rails.application.credentials[:facebook_app_secret],
+                  scope: 'public_profile,email'
 end
