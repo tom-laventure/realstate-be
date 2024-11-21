@@ -5,5 +5,5 @@ class GroupSerializer  < ActiveModel::Serializer
     object.estates.count
   end
 
-  has_many :users
+  has_many :users, :channels
 end

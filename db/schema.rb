@@ -11,6 +11,13 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.1].define(version: 2024_11_21_013652) do
+  create_table "channels", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "#<ActiveRecord::ConnectionAdapters::SQLite3::TableDefinition:0x00007f5198a23320>"
+  end
+
   create_table "estate_comments", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "estate_id", null: false
@@ -50,8 +57,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_21_013652) do
   create_table "group_channels", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "group_id", null: false
+    t.integer "channel_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["channel_id"], name: "index_group_channels_on_channel_id"
     t.index ["group_id"], name: "index_group_channels_on_group_id"
     t.index ["user_id"], name: "index_group_channels_on_user_id"
   end
@@ -71,9 +80,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_21_013652) do
     t.integer "group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "group_channel_id"
+    t.integer "channel_id"
+    t.index ["channel_id"], name: "index_messages_on_channel_id"
     t.index ["deleted_at"], name: "index_messages_on_deleted_at"
-    t.index ["group_channel_id"], name: "index_messages_on_group_channel_id"
     t.index ["group_id"], name: "index_messages_on_group_id"
     t.index ["user_id"], name: "index_messages_on_user_id"
   end
@@ -122,9 +131,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_21_013652) do
   add_foreign_key "estate_ratings", "estates"
   add_foreign_key "estate_ratings", "users"
   add_foreign_key "estates", "groups"
+  add_foreign_key "group_channels", "channels"
   add_foreign_key "group_channels", "groups"
   add_foreign_key "group_channels", "users"
-  add_foreign_key "messages", "group_channels"
+  add_foreign_key "messages", "channels"
   add_foreign_key "messages", "groups"
   add_foreign_key "messages", "users"
   add_foreign_key "subcomments", "estate_comments"
