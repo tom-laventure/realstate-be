@@ -3,8 +3,8 @@ class V1::GroupsController < ApplicationController
     before_action :auth_user
 
     def retrieve
-        groups = @current_user.groups.without_deleted 
-        render json: groups
+        groups = @current_user.groups.includes(group_channels: :channel).without_deleted
+        render json: groups, each_serializer: GroupSerializer, current_user: @current_user
     end
 
     def create

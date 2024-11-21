@@ -22,5 +22,10 @@ Rails.application.routes.draw do
     resources :subcomments, only: [:index, :show, :create, :update, :destroy]
     resources :messages, only: [:index, :create]
     resources :users, only: [:index]
+    resources :channels, only: [:show, :index] do
+      member do  
+        post :add_to_channel
+      end
+    end
   end
 end

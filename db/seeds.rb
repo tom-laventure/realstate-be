@@ -93,4 +93,24 @@ EstateComment.create!(
   comment: 'This cottage is perfect for a quiet weekend getaway.'
 )
 
+channel1 = Channel.create!(
+  name: 'Test'
+)
+
+channel2 = Channel.create!(
+  name: 'Test 2'
+)
+
+GroupChannel.create!(
+  user: user1,
+  group: group1,
+  channel: channel
+)
+
+GroupChannel.create!(
+  user: user3,
+  group: group1,
+  channel: channel
+)
+
 puts "Seed data created successfully!"
