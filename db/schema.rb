@@ -12,10 +12,9 @@
 
 ActiveRecord::Schema[7.1].define(version: 2024_11_21_013652) do
   create_table "channels", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "name"
-    t.string "#<ActiveRecord::ConnectionAdapters::SQLite3::TableDefinition:0x00007f5198a23320>"
   end
 
   create_table "estate_comments", force: :cascade do |t|
@@ -58,9 +57,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_21_013652) do
     t.integer "user_id", null: false
     t.integer "group_id", null: false
     t.integer "channel_id", null: false
+    t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["channel_id"], name: "index_group_channels_on_channel_id"
+    t.index ["deleted_at"], name: "index_group_channels_on_deleted_at"
     t.index ["group_id"], name: "index_group_channels_on_group_id"
     t.index ["user_id"], name: "index_group_channels_on_user_id"
   end

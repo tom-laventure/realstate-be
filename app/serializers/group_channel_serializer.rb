@@ -1,5 +1,5 @@
 class GroupChannelSerializer < ActiveModel::Serializer
-  attributes :group_id, user_id, :channel_id
-
-  belongs_to: :channel, :group, :user
+  belongs_to :channel
+  belongs_to :group
+  belongs_to :user
 end
