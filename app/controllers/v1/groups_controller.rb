@@ -4,7 +4,7 @@ class V1::GroupsController < ApplicationController
 
     def retrieve
         groups = @current_user.groups.includes(group_channels: :channel).without_deleted
-        render json: groups, each_serializer: GroupSerializer, current_user: @current_user
+        render json: groups, each_serializer: GroupSerializer, current_user: @current_user, active_group: param[:id]
     end
 
     def create
