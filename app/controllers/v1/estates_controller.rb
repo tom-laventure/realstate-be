@@ -1,15 +1,18 @@
+require 'open-uri'
+require 'nokogiri'
+
 class V1::EstatesController < ApplicationController
     include UserValidation, Pagination
 
     before_action :auth_user
-    before_action :set_group
+    before_action :set_group, except: [:preview_data]
     before_action :set_estate, only: [:show, :update, :destroy]
   
     # GET /estates
     def index
       estates = {
-        estates: ActiveModelSerializers::SerializableResource.new(@group.estates, each_serializer: EstateSerializer)
-        # groups: ActiveModelSerializers::SerializableResource.new(@current_user.groups, each_serializer: GroupSerializer)
+        estates: ActiveModelSerializers::SerializableResource.new(@group.estates, each_serializer: EstateSerializer),
+        group: ActiveModelSerializers::SerializableResource.new(@group, serializer: GroupSerializer)
       }
       render json: estates, status: :ok
     end
@@ -54,6 +57,32 @@ class V1::EstatesController < ApplicationController
       else
         render json: { status: 422, message: 'Error deleting estate' }, status: :unprocessable_entity
       end
+    end
+
+    def preview_data
+      url = params[:url]
+
+      if url.blank? || url.length > 2048
+        render json: { error: 'Invalid or too long URL parameter' }, status: :bad_request
+        return
+      end
+
+      begin
+        # Open the URL and parse its HTML
+        document = Nokogiri::HTML(URI.open(url))
+        Rails.logger.info("document #{document}")
+
+        image = document.at('meta[property="og:image"]')&.[]('content') ||
+        document.at('meta[name="twitter:image"]')&.[]('content')
+
+        title = document.at('meta[property="og:title"]')&.[]('content') ||
+                document.at('title')&.text
+
+        description = document.at('meta[property="og:description"]')&.[]('content') ||
+                      document.at('meta[name="description"]')&.[]('content')
+        render json: {image: image}
+      end
+
     end
   
     private
