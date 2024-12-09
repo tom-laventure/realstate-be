@@ -14,9 +14,12 @@ Rails.application.routes.draw do
   namespace :v1 do
     get 'groups', to: 'groups#retrieve'
     post 'groups/create', to: 'groups#create'
-    get 'preview_data', to: 'estates#preview_data'
     resources :groups, only: [:update, :destroy]
-    resources :estates, only: [:update, :create, :index, :show, :destroy]
+    resources :estates, only: [:update, :create, :index, :show, :destroy] do
+      collection do
+        get :preview_data
+      end
+    end
     resources :estate_ratings, only: [:index, :show, :create, :update, :destroy]
     resources :estate_comments, only: [:index, :show, :create, :update, :destroy]
     resources :subcomments, only: [:index, :show, :create, :update, :destroy]
