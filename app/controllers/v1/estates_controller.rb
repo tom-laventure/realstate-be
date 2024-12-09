@@ -80,7 +80,10 @@ class V1::EstatesController < ApplicationController
 
         description = document.at('meta[property="og:description"]')&.[]('content') ||
                       document.at('meta[name="description"]')&.[]('content')
-        render json: {image: image}
+
+        price = title&.match(/\$\d{1,3}(,\d{3})*(\.\d{2})?/)&.to_s
+        
+        render json: {image: image, header: title, price: price}
       end
 
     end
