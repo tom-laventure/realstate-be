@@ -50,6 +50,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_08_004523) do
     t.integer "group_id"
     t.datetime "deleted_at"
     t.string "image"
+    t.string "price"
     t.index ["deleted_at"], name: "index_estates_on_deleted_at"
     t.index ["group_id"], name: "index_estates_on_group_id"
   end

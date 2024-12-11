@@ -1,5 +1,5 @@
 class EstateSerializer < ActiveModel::Serializer
-  attributes :header, :link, :id, :user_rating, :estate_comments
+  attributes :header, :link, :image, :price, :id, :user_rating, :estate_comments
 
   def user_rating
     object.estate_ratings.find_by(user: current_user)

@@ -1,5 +1,6 @@
 require 'open-uri'
 require 'nokogiri'
+require 'cgi'
 
 class V1::EstatesController < ApplicationController
     include UserValidation, Pagination
@@ -60,7 +61,7 @@ class V1::EstatesController < ApplicationController
     end
 
     def preview_data
-      url = params[:url]
+      url = CGI.unescape(params[:url])
 
       if url.blank? || url.length > 2048
         render json: { error: 'Invalid or too long URL parameter' }, status: :bad_request
@@ -68,22 +69,20 @@ class V1::EstatesController < ApplicationController
       end
 
       begin
-        # Open the URL and parse its HTML
-        document = Nokogiri::HTML(URI.open(url))
-        Rails.logger.info("document #{document}")
-
+        html = URI.open(url, "User-Agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36").read
+        document = Nokogiri::HTML(html)
+        Rails.logger.info("Document #{document}")
+        # Extract metadata
         image = document.at('meta[property="og:image"]')&.[]('content') ||
-        document.at('meta[name="twitter:image"]')&.[]('content')
-
+                document.at('meta[name="twitter:image"]')&.[]('content')
         title = document.at('meta[property="og:title"]')&.[]('content') ||
                 document.at('title')&.text
-
         description = document.at('meta[property="og:description"]')&.[]('content') ||
                       document.at('meta[name="description"]')&.[]('content')
 
         price = title&.match(/\$\d{1,3}(,\d{3})*(\.\d{2})?/)&.to_s
-        
-        render json: {image: image, header: title, price: price}
+      
+        render json: { image: image, header: title, description: description, price: price }
       end
 
     end
@@ -105,7 +104,7 @@ class V1::EstatesController < ApplicationController
   
 
     def estate_params
-      params.require(:estate).permit(:header, :link)
+      params.require(:estate).permit(:header, :link, :image, :price)
     end
   end
   
