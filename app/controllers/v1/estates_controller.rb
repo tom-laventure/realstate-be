@@ -11,8 +11,10 @@ class V1::EstatesController < ApplicationController
   
     # GET /estates
     def index
+      order = params['orderby']
+      
       estates = {
-        estates: ActiveModelSerializers::SerializableResource.new(@group.estates, each_serializer: EstateSerializer, current_user: current_user),
+        estates: ActiveModelSerializers::SerializableResource.new(@group.order_estates(order, @current_user), each_serializer: EstateSerializer, current_user: current_user),
         group: ActiveModelSerializers::SerializableResource.new(@group, serializer: GroupSerializer)
       }
       render json: estates, status: :ok
