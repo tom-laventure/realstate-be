@@ -36,12 +36,12 @@ class Group < ApplicationRecord
     end
 
     def estates_ordered_by_user_rating(user)
-        estates.joins(:estate_ratings)
-               .where(estate_ratings: { user_id: user.id })
-               .group("estates.id")
-               .select("estates.*, MAX(estate_ratings.rating) AS user_max_rating")
-               .order("user_max_rating DESC")
-    end
+        estates
+          .left_joins(:estate_ratings)
+          .group('estates.id')
+          .select("estates.*, COALESCE(MAX(CASE WHEN estate_ratings.user_id = #{user.id} THEN estate_ratings.rating ELSE NULL END), 0) AS user_max_rating")
+          .order('user_max_rating DESC')
+      end
 
     def estates_ordered_by_created_at(order)
         estates.order(created_at: order)
