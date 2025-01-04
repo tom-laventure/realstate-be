@@ -11,6 +11,9 @@ class Group < ApplicationRecord
     has_many :group_channels, dependent: :destroy
     has_many :channels, through: :group_channels
 
+    has_many :estate_tags, dependent: :destroy
+    has_many :tags, through: :estate_tags
+
     validates :name, presence: true, length: { minimum: 2 } 
 
     def order_estates(order, user)

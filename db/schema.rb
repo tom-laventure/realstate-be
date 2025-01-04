@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_08_004523) do
+ActiveRecord::Schema[7.1].define(version: 2024_12_19_033415) do
   create_table "channels", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -40,6 +40,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_08_004523) do
     t.index ["deleted_at"], name: "index_estate_ratings_on_deleted_at"
     t.index ["estate_id"], name: "index_estate_ratings_on_estate_id"
     t.index ["user_id"], name: "index_estate_ratings_on_user_id"
+  end
+
+  create_table "estate_tags", force: :cascade do |t|
+    t.integer "estate_id", null: false
+    t.integer "tag_id", null: false
+    t.integer "group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["estate_id", "tag_id", "group_id"], name: "index_estate_tags_on_estate_id_and_tag_id_and_group_id", unique: true
   end
 
   create_table "estates", force: :cascade do |t|
@@ -102,6 +111,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_08_004523) do
     t.index ["user_id"], name: "index_subcomments_on_user_id"
   end
 
+  create_table "tags", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "user_groups", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "group_id", null: false
@@ -133,6 +148,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_08_004523) do
   add_foreign_key "estate_comments", "users"
   add_foreign_key "estate_ratings", "estates"
   add_foreign_key "estate_ratings", "users"
+  add_foreign_key "estate_tags", "estates"
+  add_foreign_key "estate_tags", "groups"
+  add_foreign_key "estate_tags", "tags"
   add_foreign_key "estates", "groups"
   add_foreign_key "group_channels", "channels"
   add_foreign_key "group_channels", "groups"
