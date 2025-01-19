@@ -1,6 +1,21 @@
 class V1::GroupsController < ApplicationController
     include UserValidation
     before_action :auth_user
+    before_action :set_group, only: [:show, :join_group]
+
+    def show
+        render json: @group
+    end
+
+    def join_group
+        begin
+            @group.users << @current_user unless @group.users.include?(@current_user)
+
+            render json: @group
+        rescue => e
+            logger.error "Error adding user to group #{e.message}"
+        end
+    end
 
     def retrieve
         groups = @current_user.groups.includes(group_channels: :channel).without_deleted
@@ -63,5 +78,9 @@ class V1::GroupsController < ApplicationController
                 errors: group.errors.full_messages
               }
         end
+    end
+
+    def set_group
+        @group = Group.find(params[:id])
     end
 end

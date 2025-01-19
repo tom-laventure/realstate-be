@@ -2,7 +2,7 @@ class EstateCommentSerializer < ActiveModel::Serializer
   attributes :comment, :id, :comment_owner, :comment_type, :is_author, :subcomment_count
 
   def comment_owner
-    object.user.name
+     object.user.name
   end
 
   def is_author
