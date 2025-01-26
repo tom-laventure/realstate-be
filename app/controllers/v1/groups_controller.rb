@@ -4,7 +4,11 @@ class V1::GroupsController < ApplicationController
     before_action :set_group, only: [:show, :join_group]
 
     def show
-        render json: @group
+        if @group.users.find(@current_user.id)
+            render json: {in_group: true, group: @group}
+        else 
+            render json: {in_group: false, group: @group}
+        end
     end
 
     def join_group
