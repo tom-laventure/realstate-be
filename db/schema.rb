@@ -10,7 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_19_033415) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_10_000718) do
+  create_table "agents", id: :string, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "phone"
+    t.string "license_number"
+    t.string "brokerage_id"
+    t.string "photo_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_agents_on_email", unique: true
+    t.index ["license_number"], name: "index_agents_on_license_number"
+  end
+
+  create_table "brokerages", id: :string, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "mls_id"
+    t.string "website"
+    t.string "logo_url"
+    t.string "contact_email"
+    t.string "contact_phone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "channels", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -31,13 +55,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_19_033415) do
   end
 
   create_table "estate_ratings", force: :cascade do |t|
-    t.decimal "rating", precision: 3, scale: 1
+    t.decimal "rating", precision: 3, scale: 1, null: false
     t.integer "user_id", null: false
     t.integer "estate_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_estate_ratings_on_deleted_at"
+    t.index ["estate_id", "user_id"], name: "index_estate_ratings_on_estate_id_and_user_id", unique: true
     t.index ["estate_id"], name: "index_estate_ratings_on_estate_id"
     t.index ["user_id"], name: "index_estate_ratings_on_user_id"
   end
@@ -60,8 +85,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_19_033415) do
     t.datetime "deleted_at"
     t.string "image"
     t.string "price"
+    t.integer "estate_ratings_count", default: 0, null: false
+    t.string "mls_number"
+    t.string "mls_source"
+    t.string "agent_id"
+    t.string "brokerage_id"
+    t.boolean "is_verified", default: false
     t.index ["deleted_at"], name: "index_estates_on_deleted_at"
+    t.index ["estate_ratings_count"], name: "index_estates_on_estate_ratings_count"
     t.index ["group_id"], name: "index_estates_on_group_id"
+    t.index ["mls_number"], name: "index_estates_on_mls_number"
   end
 
   create_table "group_channels", force: :cascade do |t|
@@ -144,6 +177,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_19_033415) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "agents", "brokerages"
   add_foreign_key "estate_comments", "estates"
   add_foreign_key "estate_comments", "users"
   add_foreign_key "estate_ratings", "estates"
@@ -151,6 +185,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_19_033415) do
   add_foreign_key "estate_tags", "estates"
   add_foreign_key "estate_tags", "groups"
   add_foreign_key "estate_tags", "tags"
+  add_foreign_key "estates", "agents"
+  add_foreign_key "estates", "brokerages"
   add_foreign_key "estates", "groups"
   add_foreign_key "group_channels", "channels"
   add_foreign_key "group_channels", "groups"
@@ -162,4 +198,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_19_033415) do
   add_foreign_key "subcomments", "users"
   add_foreign_key "user_groups", "groups"
   add_foreign_key "user_groups", "users"
+  add_foreign_key "users", "agents"
 end

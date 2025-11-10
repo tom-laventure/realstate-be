@@ -12,13 +12,16 @@ module UserValidation
           user = User.find(jwt_payload['sub'])
           if user.jti != jwt_payload['jti']
             render json: { error: 'Token has been revoked' }, status: :unauthorized
+            return nil
           end
         rescue JWT::DecodeError, ActiveRecord::RecordNotFound => e
           render json: { error: 'Unauthorized' }, status: :unauthorized
+          return nil
         end
         user
       else
         render json: { error: 'Authorization header missing' }, status: :unauthorized
+        return nil
       end
     end
   end
