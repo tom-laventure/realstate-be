@@ -4,7 +4,7 @@ class AddConstraintsToEstateRatings < ActiveRecord::Migration[7.1]
     change_column_null :estate_ratings, :rating, false, 0.0
 
     unless ActiveRecord::Base.connection.adapter_name.downcase.start_with?('sqlite')
-      add_check_constraint :estate_ratings, "rating >= 1.0 AND rating <= 5.0", name: "rating_between_1_and_5"
+      add_check_constraint :estate_ratings, "rating >= 0 AND rating <= 10.0", name: "rating_between_0_and_10"
     else
       # SQLite: cannot add constraint via ALTER; enforce at app/model level
     end
