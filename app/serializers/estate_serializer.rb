@@ -6,6 +6,7 @@ class EstateSerializer < ActiveModel::Serializer
   end
 
   has_many :estate_ratings
+  has_one :listing_detail
 
   def current_user
     @instance_options[:current_user]
@@ -18,5 +19,4 @@ class EstateSerializer < ActiveModel::Serializer
   def estate_comments
     @instance_options[:comments]
   end
-
 end

@@ -39,7 +39,7 @@ class V1::EstatesController < ApplicationController
 
       group_estates = @group.estates
                             .without_deleted
-                            .includes(:estate_ratings)
+                            .includes(:estate_ratings, :listing_detail)
                             .then(&paginate)
 
       estates = {

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_10_000718) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_11_224511) do
   create_table "agents", id: :string, force: :cascade do |t|
     t.string "name", null: false
     t.string "email", null: false
@@ -118,6 +118,34 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_10_000718) do
     t.index ["deleted_at"], name: "index_groups_on_deleted_at"
   end
 
+  create_table "listing_details", force: :cascade do |t|
+    t.integer "estate_id", null: false
+    t.string "list_price"
+    t.string "gross_taxes"
+    t.string "strata_fees"
+    t.boolean "is_pre_approved_available", default: false
+    t.integer "bedrooms"
+    t.integer "full_bathrooms"
+    t.string "property_type"
+    t.string "year_built"
+    t.string "age"
+    t.string "title"
+    t.string "style"
+    t.string "heating_type"
+    t.text "features"
+    t.text "amenities"
+    t.text "appliances"
+    t.string "community"
+    t.integer "days_on_market"
+    t.integer "views_count"
+    t.string "mls_number"
+    t.string "mls_source"
+    t.string "board"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["estate_id"], name: "index_listing_details_on_estate_id"
+  end
+
   create_table "messages", force: :cascade do |t|
     t.string "message"
     t.datetime "deleted_at"
@@ -191,6 +219,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_10_000718) do
   add_foreign_key "group_channels", "channels"
   add_foreign_key "group_channels", "groups"
   add_foreign_key "group_channels", "users"
+  add_foreign_key "listing_details", "estates"
   add_foreign_key "messages", "channels"
   add_foreign_key "messages", "groups"
   add_foreign_key "messages", "users"

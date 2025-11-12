@@ -1,116 +1,151 @@
 # db/seeds.rb
 
-# Creating Users
-user1 = User.create!(
-  email: 'user1@example.com',
-  password: 'password',
-  name: 'John Doe',
-  jti: SecureRandom.uuid
-)
+require 'faker'
 
-user2 = User.create!(
-  email: 'user2@example.com',
-  password: 'password',
-  name: 'Jane Smith',
-  jti: SecureRandom.uuid
-)
+puts "Seeding database..."
 
-user3 = User.create!(
-  email: 'user3@example.com',
-  password: 'password',
-  name: 'Jane Doeseph',
-  jti: SecureRandom.uuid
-)
+# --- Brokerages ---
+brokerages = 3.times.map do
+  Brokerage.create!(
+    id: SecureRandom.uuid,
+    name: "#{Faker::Name.last_name} Realty Ltd.",
+    mls_id: Faker::Alphanumeric.alphanumeric(number: 6).upcase,
+    website: Faker::Internet.url,
+    logo_url: Faker::Company.logo,
+    contact_email: Faker::Internet.email,
+    contact_phone: Faker::PhoneNumber.phone_number
+  )
+end
+puts "Created #{brokerages.count} brokerages."
 
-# Creating Groups
-group1 = Group.create!(
-  name: 'Luxury Estates',
-)
+# --- Agents ---
+agents = 5.times.map do
+  brokerage = brokerages.sample
+  Agent.create!(
+    id: SecureRandom.uuid,
+    name: Faker::Name.name,
+    email: Faker::Internet.unique.email,
+    phone: Faker::PhoneNumber.cell_phone,
+    license_number: Faker::Alphanumeric.alphanumeric(number: 8).upcase,
+    brokerage_id: brokerage.id,
+    photo_url: Faker::Avatar.image
+  )
+end
+puts "Created #{agents.count} agents."
 
-group2 = Group.create!(
-  name: 'Affordable Homes',
-)
+# --- Users ---
+users = 5.times.map do
+  User.create!(
+    email: Faker::Internet.unique.email,
+    password: 'password123',
+    name: Faker::Name.name,
+    jti: SecureRandom.uuid
+  )
+end
+puts "Created #{users.count} users."
 
-# Creating Estates
-estate1 = Estate.create!(
-  header: 'Luxury Mansion in Beverly Hills',
-  link: 'https://example.com/mansion',
-  group: group1
-)
+# --- Groups (Collections) ---
+groups = 3.times.map do
+  Group.create!(
+    name: ["Vancouver Condos", "Downtown Rentals", "North Shore Homes"].sample
+  )
+end
+puts "Created #{groups.count} groups."
 
-estate2 = Estate.create!(
-  header: 'Cozy Cottage in the Countryside',
-  link: 'https://example.com/cottage',
-  group: group2
-)
+# --- Add Users to Groups ---
+puts "Adding users to groups..."
+users.each do |user|
+  UserGroup.create!(
+    user: user,
+    group: groups.sample # Assign each user to one random group
+  )
+end
+puts "Added #{users.count} users to random groups."
 
-# Adding Users to Groups (UserGroups)
-UserGroup.create!(
-  user: user1,
-  group: group1
-)
+# --- Estates ---
+estates = 10.times.map do
+  agent = agents.sample
+  brokerage = brokerages.find { |b| b.id == agent.brokerage_id }
+  group = groups.sample
 
-UserGroup.create!(
-  user: user3,
-  group: group1
-)
+  estate = Estate.create!(
+    header: "#{Faker::Address.street_address}, #{Faker::Address.city}",
+    link: "https://www.rew.ca/properties/#{Faker::Alphanumeric.alphanumeric(number: 8).upcase}",
+    image: Faker::LoremFlickr.image(size: "800x600", search_terms: ['house']),
+    price: "$#{Faker::Number.between(from: 400_000, to: 1_500_000)}",
+    mls_number: "R#{Faker::Number.number(digits: 7)}",
+    mls_source: ["GVR", "FVREB", "CADREB", "BCNREB"].sample,
+    agent_id: agent.id,
+    brokerage_id: brokerage.id,
+    group_id: group.id,
+    is_verified: [true, false].sample
+  )
 
-UserGroup.create!(
-  user: user2,
-  group: group2
-)
+  # --- Listing Details ---
+  estate.create_listing_detail!(
+    list_price: estate.price,
+    gross_taxes: "$#{Faker::Number.between(from: 2000, to: 6000)}",
+    strata_fees: ["$200", "$344", "$450"].sample,
+    is_pre_approved_available: [true, false].sample,
+    bedrooms: Faker::Number.between(from: 1, to: 4),
+    full_bathrooms: Faker::Number.between(from: 1, to: 3),
+    property_type: ["Apt/Condo", "Townhouse", "House"].sample,
+    year_built: Faker::Number.between(from: 1980, to: 2022),
+    age: "#{Faker::Number.between(from: 1, to: 40)} yrs old",
+    title: ["Freehold Strata", "Leasehold"].sample,
+    style: ["Corner Unit", "Ground Level Unit", "Penthouse"].sample,
+    heating_type: ["Hot Water", "Radiant", "Forced Air"].sample,
+    features: ["In Unit Laundry", "Shopping Nearby", "Private Balcony"].join(', '),
+    amenities: ["Bike Room", "Exercise Centre", "Recreation Facilities"].join(', '),
+    appliances: ["Dishwasher", "Refrigerator", "Stove", "Washer & Dryer"].join(', '),
+    community: ["Lynn Valley", "Kitsilano", "Mount Pleasant"].sample,
+    days_on_market: Faker::Number.between(from: 1, to: 45),
+    views_count: Faker::Number.between(from: 10, to: 1000),
+    mls_number: estate.mls_number,
+    mls_source: estate.mls_source,
+    board: "Real Estate Board of Greater Vancouver"
+  )
 
-UserGroup.create!(
-    user: user3,
-    group: group2
-)
+  estate
+end
+puts "Created #{estates.count} estates with listing details."
 
-# Creating Estate Ratings
-EstateRating.create!(
-  rating: 4.5,
-  user: user1,
-  estate: estate1
-)
+# --- Comments ---
+estates.each do |estate|
+  2.times do
+    EstateComment.create!(
+      user: users.sample,
+      estate: estate,
+      comment: Faker::Lorem.sentence(word_count: 12),
+      comment_type: ["like", "dislike", "neutral"].sample
+    )
+  end
+end
+puts "Created estate comments."
 
-EstateRating.create!(
-  rating: 3.8,
-  user: user2,
-  estate: estate2
-)
+# --- Ratings ---
+estates.each do |estate|
+  users.sample(3).each do |user|
+    EstateRating.create!(
+      user: user,
+      estate: estate,
+      rating: Faker::Number.between(from: 3.0, to: 5.0).round(1)
+    )
+  end
+end
+puts "Created estate ratings."
 
-# Creating Estate Comments
-EstateComment.create!(
-  user: user1,
-  estate: estate1,
-  comment_type: 'good',
-  comment: 'This estate is absolutely stunning!'
-)
+# --- Tags ---
+tag_names = ["Pet Friendly", "Pool", "Newly Renovated", "Ocean View"]
+tags = tag_names.map { |n| Tag.find_or_create_by!(name: n) }
 
-EstateComment.create!(
-  user: user2,
-  estate: estate2,
-  comment_type: 'good',
-  comment: 'This cottage is perfect for a quiet weekend getaway.'
-)
+estates.each do |estate|
+  EstateTag.create!(
+    estate_id: estate.id,
+    tag_id: tags.sample.id,
+    group_id: estate.group_id
+  ) rescue ActiveRecord::RecordInvalid
+end
+puts "Tagged estates."
 
-channel1 = Channel.create!(
-  name: 'Test'
-)
-
-channel2 = Channel.create!(
-  name: 'Test 2'
-)
-
-GroupChannel.create!(
-  user: user1,
-  group: group1,
-  channel: channel
-)
-
-GroupChannel.create!(
-  user: user3,
-  group: group1,
-  channel: channel
-)
-
-puts "Seed data created successfully!"
+puts "✅ Seeding complete!"
