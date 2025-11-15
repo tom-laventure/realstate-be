@@ -20,7 +20,7 @@ class V1::EstatesController < ApplicationController
       paged_estates = estates_relation.then(&paginate)
 
       estates = {
-        estates: ActiveModelSerializers::SerializableResource.new(paged_estates, each_serializer: EstateSerializer, current_user: @current_user),
+        estates: ActiveModelSerializers::SerializableResource.new(paged_estates, each_serializer: EstateSerializer, current_user: @current_user, group: @group),
         group: ActiveModelSerializers::SerializableResource.new(@group, serializer: GroupSerializer)
       }
       render json: estates, status: :ok
@@ -33,7 +33,7 @@ class V1::EstatesController < ApplicationController
                                  .includes(:user)
                                  .then(&paginate)
 
-      paginated_comments_serialized = ActiveModelSerializers::SerializableResource.new(paginated_comments, each_serializer: EstateCommentSerializer, current_user: @current_user)
+      paginated_comments_serialized = ActiveModelSerializers::SerializableResource.new(paginated_comments, each_serializer: EstateCommentSerializer, current_user: @current_user, group: @group)
 
       selected_estate = ActiveModelSerializers::SerializableResource.new(@estate, serializer: EstateSerializer, current_user: @current_user, comments: paginated_comments_serialized)
 
@@ -100,6 +100,8 @@ class V1::EstatesController < ApplicationController
         render json: { error: 'Failed to fetch preview data' }, status: :bad_gateway
       end
     end
+
+    
   
     private
 

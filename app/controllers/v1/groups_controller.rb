@@ -1,7 +1,7 @@
 class V1::GroupsController < ApplicationController
     include UserValidation
     before_action :auth_user
-    before_action :set_group, only: [:show, :join_group]
+    before_action :set_group, only: [:show, :join_group, :toggle_like]
 
     def show
         if @group.users.find(@current_user.id)
@@ -81,6 +81,30 @@ class V1::GroupsController < ApplicationController
                 message: 'Error updating group',
                 errors: group.errors.full_messages
               }
+        end
+    end
+
+    def toggle_like
+        params.require(:estate_id)
+
+        estate = @group.estates.find(params[:estate_id])
+
+        like = EstateLike.find_by(
+            user_id: @current_user.id,
+            estate_id: estate.id,
+            group_id: @group.id
+        )
+
+        if like
+            like.destroy
+            render json: { liked: false }
+        else
+            EstateLike.create!(
+                user: @current_user,
+                estate: estate,
+                group: @group
+            )
+            render json: { liked: true }
         end
     end
 

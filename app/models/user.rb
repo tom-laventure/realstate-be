@@ -10,6 +10,9 @@ class User < ApplicationRecord
   has_many :messages, dependent: :destroy
   has_many :group_channels, dependent: :destroy
   
+  has_many :estate_likes, dependent: :destroy
+  has_many :liked_estates, through: :estate_likes, source: :estate
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,

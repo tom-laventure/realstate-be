@@ -17,6 +17,7 @@ Rails.application.routes.draw do
         post :join_group
         post :create
         get :retrieve
+        post :toggle_like
       end
     end
     resources :estates, only: [:update, :create, :index, :show, :destroy] do

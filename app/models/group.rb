@@ -14,6 +14,8 @@ class Group < ApplicationRecord
     has_many :estate_tags, dependent: :destroy
     has_many :tags, through: :estate_tags
 
+    has_many :estate_likes, dependent: :destroy
+
     validates :name, presence: true, length: { minimum: 2 } 
 
     def order_estates(order, user)

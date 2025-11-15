@@ -1,5 +1,5 @@
 class EstateSerializer < ActiveModel::Serializer
-  attributes :address, :link, :image, :price, :id, :user_rating,
+  attributes :address, :link, :image, :price, :id, :user_rating, :liked,
              :estate_comments, :estate_comment_count, :estate_ratings, :listing_detail
 
 
@@ -53,4 +53,17 @@ class EstateSerializer < ActiveModel::Serializer
   def estate_comments
     @instance_options[:comments]
   end
+
+  def liked
+    return false unless current_user && current_group
+
+    object.estate_likes.loaded? ?
+      object.estate_likes.any? { |l| l.user_id == current_user.id && l.group_id == current_group.id } :
+      EstateLike.exists?(user: current_user, estate: object, group: current_group)
+  end
+
+  def current_group
+    @instance_options[:group]
+  end
+
 end

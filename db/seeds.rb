@@ -1,5 +1,5 @@
 # db/seeds.rb
-
+include ActionView::Helpers::NumberHelper
 require 'faker'
 
 puts "Seeding database..."
@@ -72,7 +72,11 @@ estates = 10.times.map do
     address: "#{Faker::Address.street_address}, #{Faker::Address.city}",
     link: "https://www.rew.ca/properties/#{Faker::Alphanumeric.alphanumeric(number: 8).upcase}",
     image: Faker::LoremFlickr.image(size: "800x600", search_terms: ['house']),
-    price: "$#{Faker::Number.between(from: 400_000, to: 1_500_000)}",
+    price: number_to_currency(
+      Faker::Number.between(from: 400_000, to: 1_500_000),
+      unit: "$",
+      precision: 0
+    ),
     mls_number: "R#{Faker::Number.number(digits: 7)}",
     mls_source: ["GVR", "FVREB", "CADREB", "BCNREB"].sample,
     agent_id: agent.id,

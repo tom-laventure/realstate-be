@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_14_074227) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_15_202303) do
   create_table "agents", id: :string, force: :cascade do |t|
     t.string "name", null: false
     t.string "email", null: false
@@ -52,6 +52,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_14_074227) do
     t.index ["deleted_at"], name: "index_estate_comments_on_deleted_at"
     t.index ["estate_id"], name: "index_estate_comments_on_estate_id"
     t.index ["user_id"], name: "index_estate_comments_on_user_id"
+  end
+
+  create_table "estate_likes", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "estate_id", null: false
+    t.integer "group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["estate_id"], name: "index_estate_likes_on_estate_id"
+    t.index ["group_id"], name: "index_estate_likes_on_group_id"
+    t.index ["user_id", "estate_id", "group_id"], name: "index_estate_likes_on_user_id_and_estate_id_and_group_id", unique: true
+    t.index ["user_id"], name: "index_estate_likes_on_user_id"
   end
 
   create_table "estate_ratings", force: :cascade do |t|
@@ -208,6 +220,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_14_074227) do
   add_foreign_key "agents", "brokerages"
   add_foreign_key "estate_comments", "estates"
   add_foreign_key "estate_comments", "users"
+  add_foreign_key "estate_likes", "estates"
+  add_foreign_key "estate_likes", "groups"
+  add_foreign_key "estate_likes", "users"
   add_foreign_key "estate_ratings", "estates"
   add_foreign_key "estate_ratings", "users"
   add_foreign_key "estate_tags", "estates"

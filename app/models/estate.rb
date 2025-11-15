@@ -8,6 +8,9 @@ class Estate < ApplicationRecord
     has_many :estate_comments, dependent: :destroy
     has_many :estate_tags, dependent: :destroy
     has_many :tags, through: :estate_tags
+
+    has_many :estate_likes, dependent: :destroy
+    has_many :liked_by_users, through: :estate_likes, source: :user
     
     has_one :listing_detail, dependent: :destroy
 
