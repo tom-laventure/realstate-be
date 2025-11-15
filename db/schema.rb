@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_11_224511) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_14_074227) do
   create_table "agents", id: :string, force: :cascade do |t|
     t.string "name", null: false
     t.string "email", null: false
@@ -77,7 +77,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_11_224511) do
   end
 
   create_table "estates", force: :cascade do |t|
-    t.string "header"
     t.string "link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -91,6 +90,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_11_224511) do
     t.string "agent_id"
     t.string "brokerage_id"
     t.boolean "is_verified", default: false
+    t.string "address"
     t.index ["deleted_at"], name: "index_estates_on_deleted_at"
     t.index ["estate_ratings_count"], name: "index_estates_on_estate_ratings_count"
     t.index ["group_id"], name: "index_estates_on_group_id"

@@ -20,7 +20,7 @@ class V1::EstatesController < ApplicationController
       paged_estates = estates_relation.then(&paginate)
 
       estates = {
-        estates: ActiveModelSerializers::SerializableResource.new(paged_estates, each_serializer: EstateSerializer, current_user: current_user),
+        estates: ActiveModelSerializers::SerializableResource.new(paged_estates, each_serializer: EstateSerializer, current_user: @current_user),
         group: ActiveModelSerializers::SerializableResource.new(@group, serializer: GroupSerializer)
       }
       render json: estates, status: :ok
@@ -33,17 +33,11 @@ class V1::EstatesController < ApplicationController
                                  .includes(:user)
                                  .then(&paginate)
 
-      paginated_comments_serialized = ActiveModelSerializers::SerializableResource.new(paginated_comments, each_serializer: EstateCommentSerializer, current_user: current_user)
+      paginated_comments_serialized = ActiveModelSerializers::SerializableResource.new(paginated_comments, each_serializer: EstateCommentSerializer, current_user: @current_user)
 
-      selected_estate = ActiveModelSerializers::SerializableResource.new(@estate, serializer: EstateSerializer, current_user: current_user, comments: paginated_comments_serialized)
-
-      group_estates = @group.estates
-                            .without_deleted
-                            .includes(:estate_ratings, :listing_detail)
-                            .then(&paginate)
+      selected_estate = ActiveModelSerializers::SerializableResource.new(@estate, serializer: EstateSerializer, current_user: @current_user, comments: paginated_comments_serialized)
 
       estates = {
-        estates: ActiveModelSerializers::SerializableResource.new(group_estates, each_serializer: EstateSerializer),
         selected_estate: selected_estate,
       } 
 
@@ -117,13 +111,13 @@ class V1::EstatesController < ApplicationController
   
 
     def set_estate
-      @estate = @group.estates.without_deleted.includes(:estate_ratings, :estate_comments).find(params[:id])
+      @estate = @group.estates.without_deleted.includes(:estate_ratings, :estate_comments, :listing_detail).find(params[:id])
     rescue ActiveRecord::RecordNotFound
       render json: { status: 404, message: 'Estate not found' }, status: :not_found
     end
   
 
     def estate_params
-      params.require(:estate).permit(:header, :link, :image, :price)
+      params.require(:estate).permit(:address, :link, :image, :price)
     end
   end

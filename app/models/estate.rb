@@ -13,7 +13,7 @@ class Estate < ApplicationRecord
 
     accepts_nested_attributes_for :listing_detail, update_only: true
 
-    attribute :header
+    attribute :address
     attribute :image
     attribute :price
     attribute :link

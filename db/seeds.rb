@@ -69,7 +69,7 @@ estates = 10.times.map do
   group = groups.sample
 
   estate = Estate.create!(
-    header: "#{Faker::Address.street_address}, #{Faker::Address.city}",
+    address: "#{Faker::Address.street_address}, #{Faker::Address.city}",
     link: "https://www.rew.ca/properties/#{Faker::Alphanumeric.alphanumeric(number: 8).upcase}",
     image: Faker::LoremFlickr.image(size: "800x600", search_terms: ['house']),
     price: "$#{Faker::Number.between(from: 400_000, to: 1_500_000)}",
