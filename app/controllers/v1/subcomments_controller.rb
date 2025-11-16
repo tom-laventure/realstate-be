@@ -57,7 +57,7 @@ class V1::SubcommentsController < ApplicationController
     end
   
     def subcomment_params
-      params.require(:subcomment).permit(:comment)
+      params.permit(:comment)
     end
   end
   
