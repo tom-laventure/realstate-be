@@ -15,7 +15,7 @@ class V1::EstatesController < ApplicationController
 
       estates_relation = @group.order_estates(order, @current_user)
                               .without_deleted
-                              .includes(:estate_ratings, :estate_comments)
+                              .includes(:estate_ratings, :estate_comments, :listing_detail)
 
       paged_estates = estates_relation.then(&paginate)
 
@@ -101,7 +101,7 @@ class V1::EstatesController < ApplicationController
       end
     end
 
-    
+
   
     private
 

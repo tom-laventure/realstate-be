@@ -153,6 +153,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_15_202303) do
     t.string "mls_number"
     t.string "mls_source"
     t.string "board"
+    t.integer "sqft"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["estate_id"], name: "index_listing_details_on_estate_id"

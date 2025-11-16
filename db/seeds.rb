@@ -107,7 +107,8 @@ estates = 10.times.map do
     views_count: Faker::Number.between(from: 10, to: 1000),
     mls_number: estate.mls_number,
     mls_source: estate.mls_source,
-    board: "Real Estate Board of Greater Vancouver"
+    board: "Real Estate Board of Greater Vancouver",
+    sqft: Faker::Number.between(from: 500, to: 2500)
   )
 
   estate

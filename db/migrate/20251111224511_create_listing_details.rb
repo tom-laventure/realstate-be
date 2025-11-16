@@ -31,6 +31,7 @@ class CreateListingDetails < ActiveRecord::Migration[7.1]
       t.string  :mls_number
       t.string  :mls_source
       t.string  :board
+      t.integer :sqft
 
       t.timestamps
     end
