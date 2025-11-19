@@ -1,5 +1,5 @@
 class SubcommentSerializer < ActiveModel::Serializer
-  attributes :comment, :comment_owner, :is_author, :id
+  attributes :comment, :comment_owner, :is_author, :id, :updated_at, :created_at
 
   def comment_owner
     object.user.name

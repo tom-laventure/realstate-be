@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_15_202303) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_19_044819) do
   create_table "agents", id: :string, force: :cascade do |t|
     t.string "name", null: false
     t.string "email", null: false
@@ -49,6 +49,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_15_202303) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.integer "subcomment_count", default: 0, null: false
     t.index ["deleted_at"], name: "index_estate_comments_on_deleted_at"
     t.index ["estate_id"], name: "index_estate_comments_on_estate_id"
     t.index ["user_id"], name: "index_estate_comments_on_user_id"
@@ -96,7 +97,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_15_202303) do
     t.datetime "deleted_at"
     t.string "image"
     t.string "price"
-    t.integer "estate_ratings_count", default: 0, null: false
     t.string "mls_number"
     t.string "mls_source"
     t.string "agent_id"
@@ -104,7 +104,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_15_202303) do
     t.boolean "is_verified", default: false
     t.string "address"
     t.index ["deleted_at"], name: "index_estates_on_deleted_at"
-    t.index ["estate_ratings_count"], name: "index_estates_on_estate_ratings_count"
     t.index ["group_id"], name: "index_estates_on_group_id"
     t.index ["mls_number"], name: "index_estates_on_mls_number"
   end

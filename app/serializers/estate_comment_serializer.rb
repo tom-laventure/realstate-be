@@ -1,5 +1,6 @@
 class EstateCommentSerializer < ActiveModel::Serializer
-  attributes :comment, :id, :comment_owner, :comment_type, :is_author, :subcomment_count
+  attributes :comment, :id, :comment_owner, :comment_type, :is_author, :subcomment_count,
+              :created_at, :updated_at
 
   def comment_owner
      object.user.name

@@ -47,7 +47,11 @@ class EstateSerializer < ActiveModel::Serializer
   # 4. Comments already safe
   #
   def estate_comment_count
-    object.estate_comments.size || 0
+    if object.association(:estate_comments).loaded?
+      object.estate_comments.size + object.estate_comments.sum(&:subcomment_count)
+    else
+      0  # or fetch from a cached counter if you add one to estates table
+    end
   end
 
   def estate_comments
