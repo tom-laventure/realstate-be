@@ -14,8 +14,13 @@ class V1::EstatesController < ApplicationController
       order = params['orderby']
 
       estates_relation = @group.order_estates(order, @current_user)
-                              .without_deleted
-                              .includes(:estate_ratings, :estate_comments, :listing_detail)
+                          .without_deleted
+                          .includes(:estate_ratings, :estate_comments, :listing_detail)
+
+      if params[:favorites_only] == 'true'
+        liked_estate_ids = EstateLike.where(user: @current_user, group: @group).select(:estate_id)
+        estates_relation = estates_relation.where(id: liked_estate_ids)
+      end
 
       paged_estates = estates_relation.then(&paginate)
 
