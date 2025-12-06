@@ -11,7 +11,7 @@ class V1::EstatesController < ApplicationController
   
     # GET /estates
     def index
-      order = params['orderby']
+      order = params['order_by']
 
       estates_relation = @group.order_estates(order, @current_user)
                           .without_deleted
